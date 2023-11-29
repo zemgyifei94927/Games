@@ -1,4 +1,4 @@
-using GamesWeb.Data;
+using Games.DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

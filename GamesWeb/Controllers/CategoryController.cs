@@ -1,5 +1,5 @@
-﻿using GamesWeb.Data;
-using GamesWeb.Models;
+﻿using Games.DataAccess.Data;
+using Games.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GamesWeb.Controllers

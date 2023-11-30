@@ -1,19 +1,22 @@
 ﻿using Games.DataAccess.Data;
 using Games.Models;
 using Microsoft.AspNetCore.Mvc;
+using Games.DataAccess.Repository.IRepository;
 
-namespace GamesWeb.Controllers
+namespace GamesWeb.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoryController : Controller
     {
-        private readonly ApplicationDbContext _db;
-        public CategoryController(ApplicationDbContext db) 
+        //private readonly ICategoryRepository _categoryRepo;
+        private readonly IUnitofWork _unitofWork;
+        public CategoryController(IUnitofWork unitofWork) 
         {
-            _db = db;
+            _unitofWork = unitofWork;
         }
         public IActionResult Index()
         {   
-            List<Category> objCategoryList = _db.Categories.ToList();
+            List<Category> objCategoryList = _unitofWork.Category.GetAll().ToList();
             return View(objCategoryList);
         }
 
@@ -31,8 +34,8 @@ namespace GamesWeb.Controllers
             //}
             if (ModelState.IsValid)
             {
-                _db.Categories.Add(category);
-                _db.SaveChanges();
+                _unitofWork.Category.Add(category);
+                _unitofWork.Save();
                 TempData["success"] = "Category Created Successfully.";
                 return RedirectToAction("Index", "Category");
             }
@@ -46,7 +49,7 @@ namespace GamesWeb.Controllers
             {
                 return NotFound();
             }
-            Category categoryFromDb = _db.Categories.Find(id);
+            Category categoryFromDb = _unitofWork.Category.Get(u => u.Id == id);
             //Category categoryFromDb2 = _db.Categories.FirstOrDefault(c => c.Id == id);
             //Category categoryFromDb3 = _db.Categories.Where(c => c.Id == id).FirstOrDefault();
 
@@ -66,8 +69,8 @@ namespace GamesWeb.Controllers
             //}
             if (ModelState.IsValid)
             {
-                _db.Categories.Update(category);
-                _db.SaveChanges();
+                _unitofWork.Category.Update(category);
+                _unitofWork.Save();
                 TempData["success"] = "Category Updated Successfully.";
                 return RedirectToAction("Index", "Category");
             }
@@ -81,7 +84,7 @@ namespace GamesWeb.Controllers
             {
                 return NotFound();
             }
-            Category categoryFromDb = _db.Categories.Find(id);
+            Category categoryFromDb = _unitofWork.Category.Get(u => u.Id == id);
             //Category categoryFromDb2 = _db.Categories.FirstOrDefault(c => c.Id == id);
             //Category categoryFromDb3 = _db.Categories.Where(c => c.Id == id).FirstOrDefault();
 
@@ -99,13 +102,13 @@ namespace GamesWeb.Controllers
             //{
             //    ModelState.AddModelError("Name", "This is a custom validation. Dispaly order can not be the same as Name.");
             //}
-            Category? categoryFromDb = _db.Categories.Find(id);
+            Category? categoryFromDb = _unitofWork.Category.Get(u => u.Id == id);
             if(categoryFromDb == null)
             {
                 return NotFound();
             }
-            _db.Categories.Remove(categoryFromDb);
-            _db.SaveChanges();
+            _unitofWork.Category.Remove(categoryFromDb);
+            _unitofWork.Save();
             TempData["success"] = "Category Deleted Successfully.";
             return RedirectToAction("Index", "Category");
         }

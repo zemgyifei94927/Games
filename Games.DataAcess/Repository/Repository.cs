@@ -17,26 +17,39 @@ namespace Games.DataAccess.Repository
         public Repository(ApplicationDbContext db) {
             _db = db;
             this.dbSet = _db.Set<T>();
+            _db.Products.Include(u => u.Category);
         }
         public void Add(T entity)
         {
             dbSet.Add(entity);
         }
 
-        public T Get(Expression<Func<T, bool>> filter)
+        public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null)
         {
             //query is an object that can be applied quer on
             //In our case is the Category table
             IQueryable<T> query = dbSet;
             //Apply where filter
             query = query.Where(filter);
+            if (!String.IsNullOrEmpty(includeProperties)){
+                foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+            }
             //Get the first one
             return query.FirstOrDefault();
         }
 
-        public IEnumerable<T> GetAll()
+        public IEnumerable<T> GetAll(string? includeProperties = null)
         {
             IQueryable<T> query = dbSet;
+            if (!String.IsNullOrEmpty(includeProperties)){
+                foreach(var includeProp in includeProperties.Split(new char[] { ','}, StringSplitOptions.RemoveEmptyEntries)) 
+                {
+                    query = query.Include(includeProp);
+                }
+            }
             return query.ToList();
         }
 

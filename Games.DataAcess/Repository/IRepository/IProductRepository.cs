@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Games.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Games.DataAccess.Repository.IRepository
 {
-    public interface IUnitofWork
+    public interface IProductRepository : IRepository<Product>
     {
-        ICategoryRepository Category { get; }
-        IProductRepository Product { get; }
-        void Save();
+        void Update(Product obj);
     }
 }

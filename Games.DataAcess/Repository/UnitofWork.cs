@@ -12,9 +12,11 @@ namespace Games.DataAccess.Repository
     {
         private readonly ApplicationDbContext _db;
         public ICategoryRepository Category { get; private set; }
+        public IProductRepository Product { get; private set; }
         public UnitofWork(ApplicationDbContext db) { 
             _db = db;
             Category = new CategoryRepository(_db);
+            Product = new ProductRepository(_db);
         }
         
 

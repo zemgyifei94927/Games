@@ -4,6 +4,7 @@ using Games.DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Games.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231202211613_createProductTableAndSeedProductTable")]
+    partial class createProductTableAndSeedProductTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -71,18 +74,11 @@ namespace Games.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Developer")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -111,18 +107,14 @@ namespace Games.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
-
                     b.ToTable("Products");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            CategoryId = 1,
                             Description = "LAND, LOOT, SURVIVE! Play PUBG: BATTLEGROUNDS for free. Land on strategic locations, loot weapons and supplies, and survive to become the last team standing across various, diverse Battlegrounds. Squad up and join the Battlegrounds for the original Battle Royale experience that only PUBG: BATTLEGROUNDS can offer.",
                             Developer = "KRAFTON, Inc.",
-                            ImageUrl = "",
                             ListPrice = 98.0,
                             Price = 68.0,
                             Price100 = 58.0,
@@ -134,10 +126,8 @@ namespace Games.DataAccess.Migrations
                         new
                         {
                             Id = 2,
-                            CategoryId = 3,
                             Description = "Grand Theft Auto V for PC offers players the option to explore the award-winning world of Los Santos and Blaine County in resolutions of up to 4k and beyond, as well as the chance to experience the game running at 60 frames per second.",
                             Developer = "Rockstar North",
-                            ImageUrl = "",
                             ListPrice = 298.0,
                             Price = 98.0,
                             Price100 = 85.0,
@@ -149,10 +139,8 @@ namespace Games.DataAccess.Migrations
                         new
                         {
                             Id = 3,
-                            CategoryId = 2,
                             Description = "PICO PARK is a cooperative local/online multiplay action puzzle game for 2-8 players.",
                             Developer = "TECOPARK",
-                            ImageUrl = "",
                             ListPrice = 9.9900000000000002,
                             Price = 4.9900000000000002,
                             Price100 = 4.29,
@@ -161,17 +149,6 @@ namespace Games.DataAccess.Migrations
                             ReleaseDate = new DateTime(2021, 5, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Title = "PICO PARK"
                         });
-                });
-
-            modelBuilder.Entity("Games.Models.Product", b =>
-                {
-                    b.HasOne("Games.Models.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
                 });
 #pragma warning restore 612, 618
         }

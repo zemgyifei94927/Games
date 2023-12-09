@@ -4,10 +4,14 @@ using Microsoft.AspNetCore.Mvc;
 using Games.DataAccess.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Games.Models.ViewModels;
+using Games.Utility;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GamesWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.Role_Admin)]
+
     public class ProductController : Controller
     {
         //private readonly ICategoryRepository _categoryRepo;
@@ -125,14 +129,17 @@ namespace GamesWeb.Areas.Admin.Controllers
                 return Json(new { success = false, message = "Error while deleting" });
             }
 
-            var oldImagePath =
+            if(productToBeDeleted.ImageUrl != null)
+            {
+                var oldImagePath =
                             Path.Combine(_webHostEnvironment.WebRootPath, productToBeDeleted.ImageUrl.TrimStart('\\'));
 
-            if (System.IO.File.Exists(oldImagePath))
-            {
-                System.IO.File.Delete(oldImagePath);
+                if (System.IO.File.Exists(oldImagePath))
+                {
+                    System.IO.File.Delete(oldImagePath);
+                }
             }
-
+            
             _unitofWork.Product.Remove(productToBeDeleted);
             _unitofWork.Save();
 

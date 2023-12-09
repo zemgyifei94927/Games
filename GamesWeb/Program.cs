@@ -2,6 +2,9 @@ using Games.DataAccess.Data;
 using Games.DataAccess.Repository;
 using Games.DataAccess.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Games.Utility;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,8 +12,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options => 
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 //builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IUnitofWork, UnitofWork>();
+builder.Services.AddRazorPages();
+builder.Services.AddScoped<IEmailSender, EmailSender>();
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+    options.LoginPath = $"/Identity/Account/Login";
+    options.LogoutPath = $"/Identity/Account/Logout";
+});
 
 var app = builder.Build();
 
@@ -27,10 +40,11 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
-
+app.MapRazorPages();
 app.Run();

@@ -1,18 +1,17 @@
-﻿@model List<Product>
-
+﻿
 <div class="card shadow border-0 my-4">
     <div class="card-header bg-secondary bg-gradient ml-0 py-3">
         <div class="row">
             <div class="col-12 text-center">
-                <h2 class="text-white py-2">Product List</h2>
+                <h2 class="text-white py-2">Company List</h2>
             </div>
         </div>
     </div>
     <div class="card-body p-4">
         <div class="row pb-3">
             <div class="col-12 text-end">
-                <a asp-controller="Product" asp-action="Upsert" class="btn btn-primary">
-                    <i class="bi bi-plus-circle"></i> Create New Product
+                <a asp-controller="Company" asp-action="Upsert" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Create New Company
                 </a>
             </div>
         </div>
@@ -21,31 +20,22 @@
             <thead>
                 <tr>
                     <th>
-                        Product Title
+                        Name
                     </th>
                     <th>
-                        Developer
+                        Address
                     </th>
                     <th>
-                        Publisher
+                        City
                     </th>
                     <th>
-                        Release Date
+                        State
                     </th>
                     <th>
-                        List Price
+                        Postal Code
                     </th>
                     <th>
-                        Price for <=50
-                    </th>
-                    <th>
-                        Price for 50+
-                    </th>
-                    <th>
-                        Price for 100+
-                    </th>
-                    <th>
-                        Category
+                        Phone Number
                     </th>
                     <th></th>
                 </tr>
@@ -55,5 +45,5 @@
 </div>
 
 @section Scripts{
-    <script src="~/js/product.js"></script>
+    <script src="~/js/company.js"></script>
 }

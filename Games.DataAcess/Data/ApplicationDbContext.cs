@@ -15,6 +15,8 @@ namespace Games.DataAccess.Data
         public DbSet<Category> Categories { get; set; }
 
         public DbSet<Product> Products { get; set; }
+
+        public DbSet<Company> Companys { get; set; }
         public DbSet<ApplicationUser> applicationUsers { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -70,6 +72,49 @@ namespace Games.DataAccess.Data
                         Price100 = 4.29,
                         CategoryId = 2,
                         ImageUrl = ""
+                    }
+                );
+
+            modelBuilder.Entity<Company>().HasData(
+                    new Company
+                    {
+                        Id = 1,
+                        Name = "Marlabs",
+                        StreetAddress = "1 Corporate PI S",
+                        State = "NJ",
+                        PostalCode = "08854",
+                        PhoneNumber = "732-694-1000",
+                        City = "Piscataway"
+                    },
+                    new Company
+                    {
+                        Id = 2,
+                        Name = "BeaconFire Solution",
+                        StreetAddress = "50 Millstone Rd building 300 suite 120",
+                        State = "NJ",
+                        PostalCode = "08512",
+                        PhoneNumber = "609-608-0477",
+                        City = "East Windsor"
+                    },
+                    new Company
+                    {
+                        Id = 3,
+                        Name = "Antra",
+                        StreetAddress = "21000 Atlantic Blvd STE 300",
+                        State = "VA",
+                        PostalCode = "20166",
+                        PhoneNumber = "703-994-4545",
+                        City = "Sterling"
+                    },
+                    new Company
+                    {
+                        Id = 4,
+                        Name = "Two Sigma",
+                        StreetAddress = "100 6th Ave",
+                        State = "NY",
+                        PostalCode = "10013",
+                        PhoneNumber = "212-625-5700",
+                        City = "New York"
                     }
                 );
         }

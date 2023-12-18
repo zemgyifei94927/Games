@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
+using Games.DataAccess.Repository.IRepository;
 using Games.Models;
 using Games.Utility;
 using Microsoft.AspNetCore.Authentication;
@@ -28,6 +29,7 @@ namespace GamesWeb.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IUnitofWork _unitofwork;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
@@ -35,8 +37,10 @@ namespace GamesWeb.Areas.Identity.Pages.Account
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IUnitofWork unitofWork)
         {
+            _unitofwork = unitofWork;
             _userManager = userManager;
             _roleManager = roleManager;
             _userStore = userStore;
@@ -110,6 +114,10 @@ namespace GamesWeb.Areas.Identity.Pages.Account
             public string? State { get; set; }
             public string? PostalCode { get; set; }
             public string? PhoneNumber { get; set; }
+            public int? CompanyId { get; set; }
+            [ValidateNever]
+            public IEnumerable<SelectListItem> CompanyList { get; set; }
+
         }
 
 
@@ -128,6 +136,11 @@ namespace GamesWeb.Areas.Identity.Pages.Account
                 {
                     Text = i,
                     Value = i
+                }),
+                CompanyList = _unitofwork.Company.GetAll().Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.Id.ToString()
                 })
             };
 
@@ -151,6 +164,10 @@ namespace GamesWeb.Areas.Identity.Pages.Account
                 user.PostalCode = Input.PostalCode;
                 user.PhoneNumber = Input.PhoneNumber;
                 user.Name = Input.Name;
+                if(Input.Role == SD.Role_Company)
+                {
+                    user.CompanyId = Input.CompanyId;
+                }
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)

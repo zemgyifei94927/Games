@@ -27,6 +27,7 @@ namespace GamesWeb.Areas.Admin.Controllers
             List<Product> objProductList = _unitofWork.Product.GetAll(includeProperties: "Category").ToList();
 
             return View(objProductList);
+            
         }
 
         public IActionResult Upsert(int? id)
